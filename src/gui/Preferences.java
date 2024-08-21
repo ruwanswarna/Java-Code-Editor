@@ -1,31 +1,43 @@
 package gui;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.Font;
+import java.io.FileWriter;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+/*
+ * Implements the UI to change software preferences 
+ * inherits from DialogCreator Class
+ */
+public class Preferences extends DialogCreator {
 
-public class Preferences extends JFrame {
-	
 	public Preferences() {
-		
-		 JPanel topPanel = new JPanel();
-	     JPanel bottomPanel = new JPanel();
-	     topPanel.setBackground(Color.lightGray);
-	     topPanel.setPreferredSize(new Dimension(400,80));
-		
-		 JDialog d = new JDialog(this , "Preferences", true);  
-	     d.setLayout(new BorderLayout());  
-	     d.setSize(400,600);  
-	     d.setLocationRelativeTo(null);
-	     d.setResizable(false);
-	     
-	     d.add(topPanel, BorderLayout.NORTH);
-	     d.add(bottomPanel, BorderLayout.CENTER);
-	     d.setVisible(true);
-        
+
+		super("Preferences");
+		buttonSave.addActionListener((e) -> savePreferences());
+		buttonCancel.addActionListener((e) -> jDialog.dispose());
+		jDialog.setVisible(true);
+
 	}
+
+	public void savePreferences() {
+		try {
+
+			FileWriter writer = new FileWriter("C:\\ProgramData\\Java Code Editor\\config.txt");
+			writer.write(directory.getPath());
+			writer.write("\n");
+			writer.write(font_type);
+			writer.write("\n");
+			writer.write(String.valueOf(font_size));
+			writer.write("\n");
+			writer.write(String.valueOf(font_style));
+			writer.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		jDialog.dispose();
+	}
+
+	public static Font returnFont() {
+		return new Font(font_type, font_style, font_size);
+	}
+
 }
